@@ -107,4 +107,111 @@
     </form>
     
 </body>
+
+<script>
+    var nizBlokova = ["get_odgovor", "novosti_post", "kategorije_post", "brisanje_reda", "kategorije_put", "novosti_put", "greska"];
+
+    //na samom početku želimo da sakrijemo sve blokove, dok korisnik ne odabere tip tabele i HTTP zahteva
+    function skloniBlokove(){
+        //prolazimo kroz niz blokova
+        for(const blok of nizBlokova){
+            //i vrednost display atributa u okviru css-a postavljamo na none, kako se ne bi prikazivali
+            document.getElementById(blok).style.display="none";
+        }
+    };
+    //pozivamo funkciju da se izvrši
+    skloniBlokove();
+
+    //prikaziBlok funkcija koristeći switch prolazi kroz sve tipove zahteva koji mogu biti odabrani
+    //$("input[name=http_zahtev]:checked")[0].id je jQuery funkcija koja nam omogućava da 
+    // dođemo do svih čekiranih input polja čiji je name http_zahtev 
+    // i da pristupimo njegovom id-u jer su kao id postavljene vrednosti get post put delete 
+    function prikaziBlok(){
+        switch($("input[name=http_zahtev]:checked")[0].id){
+            case "get":
+            // u slučaju da odaberemo get, sakrićemo sve prethodno prikazane div-ove
+                skloniBlokove();
+                //obrisaćemo unutrašnji HTML get_odgovor bloka 
+                document.getElementById("get_odgovor").innerHTML="";
+                // i prikazati ga da bude vidljiv, promenom atributa display sa none na block
+                document.getElementById(nizBlokova[0]).style.display="block";
+                break;
+            case "post":
+            // u slučaju da odaberemo post, sakrićemo sve prethodno prikazane div-ove
+                skloniBlokove();
+                //proverićemo da li je odabrana tabela novosti ili kategorije
+                if($("input[name=odabir_tabele]:checked").length==0){
+                    //ako nije, želimo da se prikaže div blok za grešku i ispiše poruka da mora biti obeležena greška tabela 
+                    document.getElementById(nizBlokova[6]).innerHTML="Morate odabrati tabelu za manipulaciju";
+                    document.getElementById(nizBlokova[6]).style.display="block";
+                }else{
+                    //ako jeste odabrana tabela, odnosno length nije 0
+                    //uzećemo koja je to tabela, odnosno id tog radio button-a
+                    var tabela = $("input[name=odabir_tabele]:checked")[0].id;
+                    if(tabela=="radio_kategorija"){
+                        //i u slučaju da je u pitanju tabela kategorije
+                        //prikazaćemo post formu za kategorije
+                        document.getElementById(nizBlokova[2]).style.display="block";
+                    }else if(tabela=="radio_novosti"){
+                        //u suprotnom prikazaćemo post formu za novosti
+                        document.getElementById(nizBlokova[1]).style.display="block";
+                    }
+                }
+                
+                break;
+            case "put":
+            // u slučaju da odaberemo put, sakrićemo sve prethodno prikazane div-ove
+                skloniBlokove();
+                //proverićemo da li je odabrana tabela novosti ili kategorije
+                if($("input[name=odabir_tabele]:checked").length==0){
+                    //ako nije, želimo da se prikaže div blok za grešku i ispiše poruka da mora biti obeležena greška tabela 
+                    document.getElementById(nizBlokova[6]).innerHTML="Morate odabrati tabelu za manipulaciju";
+                    document.getElementById(nizBlokova[6]).style.display="block";
+                }else{
+                    //ako jeste odabrana tabela, odnosno length nije 0
+                    //uzećemo koja je to tabela, odnosno id tog radio button-a
+                    var tabela = $("input[name=odabir_tabele]:checked")[0].id;
+                    if(tabela=="radio_kategorija"){
+                        //i u slučaju da je u pitanju tabela kategorije
+                        //prikazaćemo put formu za kategorije
+                        document.getElementById(nizBlokova[4]).style.display="block";
+                    }else if(tabela=="radio_novosti"){
+                        //u suprotnom prikazaćemo put formu za novosti
+                        document.getElementById(nizBlokova[5]).style.display="block";
+                    }
+                }
+                break;
+            case "delete":
+            //poslednja opcija nam je prikaz bloka za brisanje elemenata iz određene tabele
+                skloniBlokove();
+                //proverićemo da li je odabrana tabela novosti ili kategorije
+                if($("input[name=odabir_tabele]:checked").length==0){
+                    //ako nije, želimo da se prikaže div blok za grešku i ispiše poruka da mora biti obeležena greška tabela 
+                    document.getElementById(nizBlokova[6]).innerHTML="Morate odabrati tabelu za manipulaciju";
+                    document.getElementById(nizBlokova[6]).style.display="block";
+                }else{
+                     //ako jeste odabrana tabela, odnosno length nije 0
+                    //prikazaćemo put formu za kategorije
+                    var tabela = $("input[name=odabir_tabele]:checked")[0].id;
+                    document.getElementById(nizBlokova[3]).style.display="block";
+                }
+                break;        
+            default:
+                break;
+        }
+    }
+
+        //funkcija resetHTTP nam samo resetuje odabrane HTTP zahteve nakon promene odabrane tabele  
+    function resetHTTP(){
+        skloniBlokove();
+        $("input[name=http_zahtev]").prop('checked', false);
+    }
+
+
+    $("input[name=http_zahtev]").on('click',prikaziBlok);
+    $("input[name=odabir_tabele]").on('click',resetHTTP);
+
+
+
+</script>
 </html>
