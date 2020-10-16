@@ -207,9 +207,56 @@
         $("input[name=http_zahtev]").prop('checked', false);
     }
 
+    function posaljiZahtev(){
+        if($("input[name=odabir_tabele]:checked").length!=0 && $("input[name=http_zahtev]:checked").length!=0 ){
+            var tabela = $("input[name=odabir_tabele]:checked")[0].id;
+
+            switch($("input[name=http_zahtev]:checked")[0].id){
+                case "get":
+                    if(tabela=="radio_novosti"){
+                        $.getJSON("http://localhost:8080/rest/api/novosti", function(podaci){
+                            document.getElementById("get_odgovor").innerHTML = JSON.stringify(podaci, null, 2);
+                        });
+                    }else{
+                        $.getJSON("http://localhost:8080/rest/api/kategorije", function(data){
+                            document.getElementById("get_odgovor").innerHTML = JSON.stringify(data, null, 2);
+                        });
+                    }
+                    break;
+                case "post":
+                    if(tabela=="radio_novosti"){
+                        var values={
+                            "naslov": $("input[name=naslov_novosti]").val() ,
+                            "tekst": $("#tekst_novosti").val(),
+                            "kategorija_id": parseInt($("#kategorija_odabir").val())
+                        };
+                        console.log(values);
+                        $.post("http://localhost:8080/rest/api/novosti",JSON.stringify(values), function(data){
+                            alert("Odgovor od servera> "+data["poruka"]);
+                        } );
+                    }else{
+                        var values={
+                            "kategorija": $("input[name=kategorija_naziv]").val() 
+                        };
+                        console.log(values);
+                        $.post("http://localhost:8080/rest/api/kategorije",JSON.stringify(values), function(data){
+                            alert("Odgovor od servera> "+data["poruka"]);
+                        } );
+                    }
+                    break;
+                case "put":
+                    break;
+                case "delete":
+                    break;
+                default:
+                    console.log("zahtev nije prosao");
+            }
+        }
+    }
 
     $("input[name=http_zahtev]").on('click',prikaziBlok);
     $("input[name=odabir_tabele]").on('click',resetHTTP);
+    $("button").on('click', posaljiZahtev);
 
 
 
