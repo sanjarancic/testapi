@@ -249,8 +249,50 @@
                     }
                     break;
                 case "put":
+                    if(tabela=="radio_novosti"){
+                        var values={
+                            "naslov": $("input[name=naslov_novosti_put]").val() ,
+                            "tekst": $("#tekst_novosti_put").val(),
+                            "kategorija_id": parseInt($("#kategorija_odabir_put").val())
+                        };
+                        $.ajax({
+                            url:"http://localhost:8080/rest/api/novosti/"+parseInt($("input[name=novosti_id]").val()),
+                            type:"PUT",
+                            data:JSON.stringify(values)
+                        }).done(function(data){
+                            alert("Odgovor sa servera> "+data["poruka"]);
+                        });
+                    }else{
+                        var values={
+                            "kategorija": $("input[name=kategorija_naziv_put").val() 
+                        };
+                        $.ajax({
+                            url:"http://localhost:8080/rest/api/kategorije/"+parseInt($("input[name=kategorija_id]").val()),
+                            type:"PUT",
+                            data:JSON.stringify(values)
+                        }).done(function(data){
+                            alert("Odgovor sa servera> "+data["poruka"]);
+                        });
+                    }
                     break;
                 case "delete":
+                    if(tabela=="radio_novosti"){
+                        $.ajax({
+                            url:"http://localhost:8080/rest/api/novosti/"+parseInt($("input[name=brisanje]").val()),
+                            type:"DELETE",
+                            data:JSON.stringify(values)
+                        }).done(function(data){
+                            alert("Odgovor sa servera> "+data["poruka"]);
+                        });
+                    }else{
+                        $.ajax({
+                            url:"http://localhost:8080/rest/api/kategorije/"+parseInt($("input[name=brisanje]").val()),
+                            type:"DELETE",
+                            data:JSON.stringify(values)
+                        }).done(function(data){
+                            alert("Odgovor sa servera> "+data["poruka"]);
+                        });
+                    }
                     break;
                 default:
                     console.log("zahtev nije prosao");
