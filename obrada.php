@@ -2,6 +2,7 @@
     include "Database.php";
     $mydb = new Database('rest');
     if(isset($_POST["posalji"]) && $_POST["posalji"]="Posalji zahtev"){
+        // novosti_post
         if($_POST["naslov_novosti"]!=null && $_POST["tekst_novosti"]!=null && $_POST["kategorija_odabir"]!=null){
             $niz = ["naslov"=> "'".$_POST["naslov_novosti"]."'", "tekst"=>"'".$_POST["tekst_novosti"]."'", "datumvreme"=>"NOW()", "kategorija_id"=>$_POST["kategorija_odabir"]];
             if($mydb->insert("novosti", "naslov, tekst, datumvreme, kategorija_id", $niz)){
@@ -11,6 +12,7 @@
             }
             $_POST = array();
             exit();
+        // brisanje_reda
         }elseif($_POST["brisanje"]!=null && $_POST["odabir_tabele"]!=null){
             $tabela = $_POST["odabir_tabele"];
             $id = "id";
@@ -22,6 +24,17 @@
             }
             $_POST = array();
             exit();
+        // kategorije_post
+        } else if ($_POST["kategorija_naziv"]!=null) {
+            $niz = ["naziv" => "'".$_POST["kategorija_naziv"]."'"];
+            if($mydb->insert("kategorija", "naziv", $niz)){
+                echo "vrednosti ubacene";
+            }else{
+                echo "vrednosti nisu ubacene";
+            }
+            $_POST = array();
+            exit();
+        // kategorije_put
         }
     }
 ?>
