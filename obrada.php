@@ -46,6 +46,22 @@
             }
             $_POST = array();
             exit();
+        // novosti_put
+        } else if ($_POST["novosti_id"] !=  null && $_POST["naslov_novosti_put"] != null && $_POST["kategorija_odabir_put"] != null && $_POST["tekst_novosti_put"] != null) {
+            $id = $_POST["novosti_id"];
+            $naziv = $_POST["naslov_novosti_put"];
+            $kategorija_id = $_POST["kategorija_odabir_put"];
+            $tekst = $_POST["tekst_novosti_put"];
+
+            $niz = ["naziv" => $naziv, "kategorija_id" => kategorija_id, "tekst" => $text];
+
+            if($mydb->update("novosti", $id, "naziv, kategorija_id, tekst", $niz)){
+                echo "vrednosti izmenjene";
+            }else{
+                echo "vrednosti nisu izmenjene";
+            }
+            $_POST = array();
+            exit();
         }
     }
 ?>
