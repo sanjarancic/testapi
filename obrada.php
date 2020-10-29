@@ -26,8 +26,8 @@
             exit();
         // kategorije_post
         } else if ($_POST["kategorija_naziv"]!=null) {
-            $niz = ["naziv" => "'".$_POST["kategorija_naziv"]."'"];
-            if($mydb->insert("kategorija", "naziv", $niz)){
+            $naziv = $_POST["kategorija_naziv"];
+            if($mydb->insert("kategorija", "naziv", [$naziv])){
                 echo "vrednosti ubacene";
             }else{
                 echo "vrednosti nisu ubacene";
@@ -35,6 +35,17 @@
             $_POST = array();
             exit();
         // kategorije_put
+        } else if ($_POST["kategorija_id"] != null && $_POST["kategorija_naziv_put"] != null) {
+            $id = $_POST["kategorija_id"];
+            $naziv = $_POST["kategorija_naziv_put"];
+
+            if($mydb->update("kategorija", $id, "naziv", [$naziv])){
+                echo "vrednosti izmenjene";
+            }else{
+                echo "vrednosti nisu izmenjene";
+            }
+            $_POST = array();
+            exit();
         }
     }
 ?>
